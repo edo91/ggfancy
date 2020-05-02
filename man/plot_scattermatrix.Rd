@@ -2,52 +2,22 @@
 % Please edit documentation in R/scattermatrix.R
 \name{plot_scattermatrix}
 \alias{plot_scattermatrix}
-\title{Plot a ggplot Scatter Matrix}
+\title{Plot a ScatterMatrix}
 \usage{
-plot_scattermatrix(
-  data,
-  ...,
-  density = TRUE,
-  add_45_line = TRUE,
-  add_smooth = TRUE,
-  fixed_ratio = FALSE,
-  smooth_method = "loess",
-  title = "Scatter Matrix",
-  subtitle = NULL
-)
+plot_scattermatrix(data)
 }
 \arguments{
-\item{data}{Dataframe or tibble}
-
-\item{...}{Variables to select}
-
-\item{density}{Whether you want to have density plots on the diagonal.}
-
-\item{add_45_line}{Whether you want to add a 45 degrees line in the scatter plots.}
-
-\item{add_smooth}{Whether you want to add a geom smooth line in the scatter plots.}
-
-\item{fixed_ratio}{Whether you want to set coord_fixed or have facet_grid >> scale = "free"}
-
-\item{smooth_method}{Choose a method for geom_smoooth. Needed only if add_smooth == TRUE. See geom_smooth.}
-
-\item{title}{Set a title}
-
-\item{subtitle}{Set a subtitle}
+\item{data}{Dataframe}
 }
 \value{
-Returns a ggplot Scatter Matrix with density plots on the diagonal.
+ggmatrix object that if called, will print
 }
 \description{
-Plot a ggplot Scatter Matrix
+Plot a ScatterMatrix
 }
 \examples{
 
-plot_scattermatrix(iris) # factors and chars are eliminated automatically
-plot_scattermatrix(iris, - Species)
-plot_scattermatrix(iris, - Species, add_45_line = TRUE, density = FALSE, smooth_method = "lm")
-plot_scattermatrix(iris, - Species, add_45_line = FALSE, add_smooth = FALSE, density = FALSE)
-plot_scattermatrix(mtcars, cyl, mpg, hp, add_smooth = TRUE, smooth_method = "lm", add_45_line = FALSE, fixed_ratio = FALSE, density = FALSE)
-plot_scattermatrix(mtcars, add_smooth = TRUE, smooth_method = "lm", add_45_line = FALSE, density = FALSE)
+plot_scattermatrix(iris)
+plot_scattermatrix(mtcars)
 
 }
