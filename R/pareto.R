@@ -12,7 +12,7 @@
 #' @param title title of the chart, default: "Pareto Chart".
 #' @param xlab title of x axis, default: "items".
 #' @param ylab title of left y axis, default: "".
-#' @param ylab2 title of right y axis, default: "\% cumulate".
+#' @param ylab2 title of right y axis, default: "% cumulate".
 #' @param hline yintercept of horizontal line, default: 0.8.
 #' @param bar.color colour of bars, default: "royalblue4".
 #' @param bar.fill fill of bars, default: "royalblue".
@@ -112,7 +112,7 @@ plot_pareto <- function(to_plot,
 #' @param title title of the chart, default: "Pareto Chart".
 #' @param xlab title of x axis, default: "items".
 #' @param ylab title of left y axis, default: "".
-#' @param ylab2 title of right y axis, default: "\% cumulate".
+#' @param ylab2 title of right y axis, default: "% cumulate".
 #' @param hline yintercept of horizontal line, default: 0.8.
 #' @param bar.color colour of bars, default: "royalblue4".
 #' @param bar.fill fill of bars, default: "royalblue".

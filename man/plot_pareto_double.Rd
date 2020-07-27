@@ -37,7 +37,7 @@ plot_pareto_double(
 
 \item{ylab}{title of left y axis, default: "".}
 
-\item{ylab2}{title of right y axis, default: "\\% cumulate".}
+\item{ylab2}{title of right y axis, default: "\% cumulate".}
 
 \item{hline}{yintercept of horizontal line, default: 0.8.}
 

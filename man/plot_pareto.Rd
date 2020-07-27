@@ -36,7 +36,7 @@ plot_pareto(
 
 \item{title}{title of the chart, default: "Pareto Chart".}
 
-\item{ylab2}{title of right y axis, default: "\\% cumulate".}
+\item{ylab2}{title of right y axis, default: "\% cumulate".}
 
 \item{hline}{yintercept of horizontal line, default: 0.8.}
 
