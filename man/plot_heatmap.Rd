@@ -9,7 +9,7 @@ plot_heatmap(
   order_rows = FALSE,
   order_cols = FALSE,
   title = "Heatmap",
-  scalefun = rescale
+  scalefun = scales::rescale
 )
 }
 \arguments{

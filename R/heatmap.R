@@ -28,7 +28,7 @@
 #'
 #' @export
 #'
-plot_heatmap <- function(data, order_rows = FALSE, order_cols = FALSE, title = "Heatmap", scalefun = rescale){
+plot_heatmap <- function(data, order_rows = FALSE, order_cols = FALSE, title = "Heatmap", scalefun = scales::rescale){
 
   # get names
   nn <- names(data)

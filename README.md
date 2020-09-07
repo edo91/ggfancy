@@ -21,6 +21,9 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(ggfancy)
+#> Registered S3 method overwritten by 'GGally':
+#>   method from   
+#>   +.gg   ggplot2
 ## basic example code
 ```
 
@@ -34,13 +37,28 @@ plot_pareto(test, letters, frequency, group_over = 6)
 
 <img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
 
+### Pareto Histogram
+
+``` r
+test <- data.frame(x = rnorm(1100, 10, 3), g = letters[1:5])
+plot_pareto_histogram(test, x)
+```
+
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+
+``` r
+plot_pareto_histogram_facet(test, x, g)
+```
+
+<img src="man/figures/README-unnamed-chunk-3-2.png" width="100%" />
+
 ### Heatmap
 
 ``` r
 plot_heatmap(iris)
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
 
 ``` r
 
@@ -53,7 +71,7 @@ x <- tibble::as_tibble(setNames(purrr::rerun(6,
 plot_na(x)
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-2.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-4-2.png" width="100%" />
 
 ### Waterfall
 
@@ -77,16 +95,25 @@ starting_point <- 100
 plot_waterfall(aa, starting_point)
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
 
 ### ScatterMatrix
 
 ``` r
 plot_scattermatrix(iris)
-#> Warning: Non numerical variables discarded: Species
+#> `geom_smooth()` using formula 'y ~ x'
+#> `geom_smooth()` using formula 'y ~ x'
+#> `geom_smooth()` using formula 'y ~ x'
+#> `geom_smooth()` using formula 'y ~ x'
+#> `geom_smooth()` using formula 'y ~ x'
+#> `geom_smooth()` using formula 'y ~ x'
+#> `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+#> `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+#> `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+#> `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
 
 ### Silhoutte
 
@@ -96,4 +123,4 @@ dis <- dist(mtcars)^2
 plot_silhouette(v_clusters = kcl$cluster, mx_dist = dis, threshold = 0.3)
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />

@@ -42,6 +42,13 @@ test$frequency <- round(runif(100, 1, 5),0)
 plot_pareto(test, letters, frequency, group_over = 6)
 ```
 
+### Pareto Histogram
+```{r}
+test <- data.frame(x = rnorm(1100, 10, 3), g = letters[1:5])
+plot_pareto_histogram(test, x)
+plot_pareto_histogram_facet(test, x, g)
+```
+
 ### Heatmap
 ```{r}
 plot_heatmap(iris)
