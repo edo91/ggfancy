@@ -32,7 +32,7 @@ Plot waterfall
 \details{
 data must be a tibble with 3 columns:
 \itemize{
-\item group: for every group you'llhave an intermediate column
+\item group: for every group you'll have an intermediate column
 \item label: name of increase or decrease
 \item value: increase or decrease value
 }
@@ -52,9 +52,27 @@ aa <- tibble::tribble(
 
 )
 
+
+bb <- tibble::tribble(
+  ~ group  , ~ label      , ~ value,
+  "season1", "loss"       ,     -20,
+  "season3", "loss"       ,     -10,
+  "season1", "new"        ,      30,
+  "season1", "gain"       ,      40,
+  NA       , "loss"       ,     -15,
+  NA       , "gain"       ,      25,
+  "season3", "disappeared",     -15,
+  "season3", "gain"       ,       5
+
+)
+
 starting_point <- 100
 
 plot_waterfall(aa, starting_point)
+
+# note that groups name may be repeated: it will create its own checkpoint
+# groups can also be NA
+plot_waterfall(bb, starting_point)
 
 
 }

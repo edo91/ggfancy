@@ -12,7 +12,7 @@ You can install the development version from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("edo91/prettifier")
+devtools::install_github("edo91/ggfancy")
 ```
 
 ## Example
@@ -24,7 +24,7 @@ library(ggfancy)
 #> Registered S3 method overwritten by 'GGally':
 #>   method from   
 #>   +.gg   ggplot2
-## basic example code
+set.seed(1)
 ```
 
 ### Pareto Chart
@@ -62,11 +62,7 @@ plot_heatmap(iris)
 
 ``` r
 
-x <- tibble::as_tibble(setNames(purrr::rerun(6,
-                                             sample(c(1:10,NA), 
-                                                    100,
-                                                    replace = TRUE)),
-                                letters[1:6]))
+x <- data.frame(replicate(6,sample(c(1:10,NA), 100, replace = TRUE)))
 
 plot_na(x)
 ```

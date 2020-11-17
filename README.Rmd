@@ -23,7 +23,7 @@ You can install the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("edo91/prettifier")
+devtools::install_github("edo91/ggfancy")
 ```
 
 ## Example
@@ -32,7 +32,7 @@ This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
 library(ggfancy)
-## basic example code
+set.seed(1)
 ```
 
 ### Pareto Chart
@@ -53,11 +53,7 @@ plot_pareto_histogram_facet(test, x, g)
 ```{r}
 plot_heatmap(iris)
 
-x <- tibble::as_tibble(setNames(purrr::rerun(6,
-                                             sample(c(1:10,NA), 
-                                                    100,
-                                                    replace = TRUE)),
-                                letters[1:6]))
+x <- data.frame(replicate(6,sample(c(1:10,NA), 100, replace = TRUE)))
 
 plot_na(x)
 ```

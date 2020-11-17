@@ -11,13 +11,14 @@
 #' @param subtitle             String. Subtitle of the plot.
 #'
 #' @details data must be a tibble with 3 columns:
-#' * group: for every group you'llhave an intermediate column
+#' * group: for every group you'll have an intermediate column
 #' * label: name of increase or decrease
 #' * value: increase or decrease value
 #'
-#' @importFrom dplyr mutate group_by select ungroup summarise row_number arrange bind_rows lag if_else
+#' @importFrom dplyr mutate group_by transmute ungroup row_number bind_rows lag if_else slice_tail
 #' @importFrom magrittr %>%
-#' @importFrom ggplot2 ggplot aes geom_rect scale_y_continuous scale_x_continuous scale_fill_manual labs theme_light theme element_blank
+#' @importFrom ggplot2 ggplot aes geom_rect geom_segment scale_y_continuous scale_x_continuous labs theme_light theme element_blank
+#' @importFrom purrr map2_dbl negate
 #'
 #' @return Returns a waterfall plot.
 #'
@@ -36,9 +37,27 @@
 #'
 #' )
 #'
+#'
+#' bb <- tibble::tribble(
+#'   ~ group  , ~ label      , ~ value,
+#'   "season1", "loss"       ,     -20,
+#'   "season3", "loss"       ,     -10,
+#'   "season1", "new"        ,      30,
+#'   "season1", "gain"       ,      40,
+#'   NA       , "loss"       ,     -15,
+#'   NA       , "gain"       ,      25,
+#'   "season3", "disappeared",     -15,
+#'   "season3", "gain"       ,       5
+#'
+#' )
+#'
 #' starting_point <- 100
 #'
 #' plot_waterfall(aa, starting_point)
+#'
+#' # note that groups name may be repeated: it will create its own checkpoint
+#' # groups can also be NA
+#' plot_waterfall(bb, starting_point)
 #'
 #'
 #' @export
@@ -49,74 +68,83 @@ plot_waterfall <- function(data,
                            title = "Waterfall",
                            subtitle = NULL){
 
-  # force value as double
-  data$value <- as.numeric(data$value)
 
-  # add order to keep track
+  # check out group label value are in data
+  stopifnot(c("group", "label", "value") %in% names(data))
+
+  # calculate:
+  # - id: row number +1 (for each group)
+  # - value_s/_e: starting/ending value
+  # - sign: increase or decrease
   data <- data %>%
-    mutate(n = row_number()) %>%
-    group_by(group) %>%
-    mutate(ng = row_number()) %>%
-    ungroup()
+    mutate(groupnew = map2_dbl(group, lag(group, default = group[1]), negate(identical))) %>%
+    mutate(group_  = cumsum(groupnew),
+           id      = cumsum(1 + groupnew),
+           value_s = cumsum(lag(value, default = 0)) + starting_point,
+           value_e = cumsum(value) + starting_point,
+           sign    = if_else(value > 0, "#00BA38", "#F8766D")) # green or red
 
-  # calculate intermediate steps for each group
-  data_group <- data %>%
-    group_by(group) %>%
-    summarise(value = sum(value),
-              n = max(n),
-              ng = max(ng) + 1) %>%
-    mutate(value = value + starting_point)
+  # calculate group check point
+  # - id: completes the skip we forced before
+  # - value_s is zero: checkpoint has to start from zero
+  # - sign is neutral
+  tot_data <- data %>%
+    group_by(group_) %>%
+    slice_tail() %>%
+    ungroup() %>%
+    transmute(label   = group,
+              id      = id + 1,
+              value_s = 0,
+              value_e,
+              sign    = "#619CFF") # blue
 
-  # bind groups with stating row, groups and original data
-  data <- bind_rows(data,
-                    data_group,
-                    list(group = label_starting_point, value = starting_point, n = 0, ng = 0))
+  # create first checkpoint
+  start_data <- list(label   = label_starting_point,
+                     id      = 0,
+                     value_s = 0,
+                     value_e = starting_point,
+                     sign    = "#619CFF") # blue
 
+  # bind the three dataframe
+  data <- bind_rows(start_data, tot_data, data)
 
-  # arrange in the right order
+  # create the width of bars and segments
   data <- data %>%
-    arrange(n, ng) %>%
-    select(-n , -ng)
-
-  # calc initial value and final value
-  data <- data %>%
-    mutate(value_f = cumsum(if_else(is.na(label), 0, value)) + starting_point) %>%
-    mutate(value_p = if_else(is.na(label), 0, lag(value_f, default = 0)))
-
-  # calc id to keep positions
-  data <- data %>%
-    mutate(id = row_number())
-
-  # define colour: red down, green up, blue intermediate
-  data <- data %>%
-    mutate(sign = if_else(is.na(label), "blue", if_else(value > 0, "green", "red")))
-
-  # define label for intermediate bars
-  data <- data %>%
-    mutate(label = if_else(is.na(label), group, label))
-
+    mutate(rmin = id - 0.45, # bar start
+           rmax = id + 0.45, # bar end
+           smax = rmax + (id != max(id))) # segment end
 
   # waterfall
-  ggplot(data, aes(fill = sign)) +
-    geom_rect(aes(xmin = id - 0.45,
-                  xmax = id + 0.45,
-                  ymin = value_p,
-                  ymax = value_f)) +
+  ggplot(data) +
 
-    scale_y_continuous(labels = scales::comma) +
+    # bars
+    geom_rect(aes(xmin = rmin,
+                  xmax = rmax,
+                  ymin = value_s,
+                  ymax = value_e,
+                  fill = I(sign))) +
 
-    scale_fill_manual(values = c(red = "#F8766D", green = "#00BA38", blue = "#619CFF")) +
+    # connection segments
+    geom_segment(aes(x    = rmin,
+                     xend = smax,
+                     y    = value_e,
+                     yend = value_e),
+                 colour = "gray50") +
 
+    # rename ids on x axis
     scale_x_continuous(breaks = data$id,
                        labels = data$label) +
 
+    # make it pretty
+    scale_y_continuous(labels = scales::comma) +
     labs(title    = title,
          subtitle = subtitle,
          x        = "",
          y        = "") +
     theme_light() +
     theme(panel.grid.major.x = element_blank(),
-          panel.grid.minor.x = element_blank(),
-          legend.position = "none")
+          panel.grid.minor.x = element_blank())
+
 
 }
+

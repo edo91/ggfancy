@@ -69,7 +69,7 @@ plot_heatmap <- function(data, order_rows = FALSE, order_cols = FALSE, title = "
     mutate(.row = row_number()) %>%
     gather(var, value, -.row)
 
-  # reoder var
+  # reorder var
   data$var <- factor(data$var, levels = nn[colInd], ordered = TRUE)
 
   # plot heatmap
