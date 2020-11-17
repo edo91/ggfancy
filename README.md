@@ -1,9 +1,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ggfancy
+# `ggfancy`
 
-The goal of ggfancy is to create clean and helpful ggplots.
+The goal of `ggfancy` is to create clean and helpful `ggplot`s.
 
 ## Installation
 

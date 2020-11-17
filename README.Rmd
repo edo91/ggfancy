@@ -13,9 +13,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-# ggfancy
+# `ggfancy`
 
-The goal of ggfancy is to create clean and helpful ggplots.
+The goal of `ggfancy` is to create clean and helpful `ggplot`s.
 
 ## Installation
 
